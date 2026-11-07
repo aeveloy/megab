@@ -50,7 +50,8 @@ local ICONS = {
     ["moon"] = { 16898613613, 306, 918 },        ["ghost"] = { 16898613353, 869, 906 },
     ["code"] = { 16898613044, 355, 869 },        ["gem"] = { 16898613353, 918, 857 },
     ["flame"] = { 16898613353, 967, 306 },       ["leaf"] = { 16898613509, 918, 661 },
-    ["waves"] = { 16898613869, 820, 808 },       ["cherry"] = { 16898612819, 612, 967 },
+    ["waves"] = { 16898613869, 820, 808 },       ["cloud-rain"] = { 16898613044, 147, 820 },
+          ["cherry"] = { 16898612819, 612, 967 },
     ["bird"] = { 16898612819, 869, 0 },          ["skull"] = { 16898613777, 49, 869 },
     ["target"] = { 16898613869, 514, 771 },      ["crown"] = { 16898613044, 404, 918 },
 }
@@ -71,18 +72,29 @@ local THEMES = {
     ChatGPT  = { mascot = "chatgpt", icon = "bot",      bg = rgb(13,13,13),  panel = rgb(23,23,23),  card = rgb(33,33,33),  cardHover = rgb(44,44,44),  stroke = rgb(52,52,52),  text = rgb(236,236,236), muted = rgb(155,155,155), accent = rgb(16,163,127), accent2 = rgb(25,195,125),  off = rgb(64,64,64),   onText = rgb(255,255,255) },
     Gemini   = { mascot = "gemini", icon = "gem",      bg = rgb(14,16,24),  panel = rgb(20,23,34),  card = rgb(28,32,46),  cardHover = rgb(36,41,58),  stroke = rgb(46,52,72),  text = rgb(232,236,248), muted = rgb(140,150,175), accent = rgb(71,150,227),  accent2 = rgb(202,102,115), off = rgb(56,62,84),   onText = rgb(255,255,255) },
     Black    = { icon = "moon",     bg = rgb(0,0,0),     panel = rgb(8,8,8),     card = rgb(16,16,16),  cardHover = rgb(26,26,26),  stroke = rgb(38,38,38),  text = rgb(255,255,255), muted = rgb(130,130,130), accent = rgb(255,255,255), accent2 = rgb(170,170,170), off = rgb(50,50,50),   onText = rgb(0,0,0) },
-    -- Code: Matrix rain (assets/hacker_*.png, spritesheets of docs/hacker.gif) behind see-through panels
+    -- backdrop themes: animated spritesheets / pictures from docs/, converted into assets/<sheet><i>.png
     Code     = { icon = "code",     bg = rgb(0,0,0),     panel = rgb(2,12,5),    card = rgb(4,22,9),    cardHover = rgb(8,38,15),   stroke = rgb(18,90,38),  text = rgb(205,255,215), muted = rgb(95,185,115), accent = rgb(0,255,95),    accent2 = rgb(0,170,65),    off = rgb(20,60,30),   onText = rgb(0,0,0),
-        glass = { panel = 0.3, card = 0.25 },
+        glass = { bg = 0, panel = 0.3, card = 0.25 },
         backdrop = { sheet = "hacker_", sheets = 3, cols = 3, rows = 4, frames = 35, w = 340, h = 243, delay = 0.16, transparency = 0.35 } },
-    Ocean    = { icon = "waves",    bg = rgb(10,22,33),  panel = rgb(14,30,44),  card = rgb(19,40,58),  cardHover = rgb(25,50,72),  stroke = rgb(32,60,84),  text = rgb(225,240,250), muted = rgb(130,160,185), accent = rgb(0,170,200),   accent2 = rgb(80,220,200),  off = rgb(38,66,90),   onText = rgb(255,255,255) },
-    Sakura   = { icon = "cherry",   bg = rgb(28,18,24),  panel = rgb(38,24,32),  card = rgb(50,32,42),  cardHover = rgb(62,40,52),  stroke = rgb(74,48,62),  text = rgb(250,232,240), muted = rgb(190,150,170), accent = rgb(255,120,170), accent2 = rgb(255,180,210), off = rgb(84,56,70),   onText = rgb(255,255,255) },
-    Forest   = { icon = "leaf",     bg = rgb(16,22,17),  panel = rgb(22,30,23),  card = rgb(30,40,31),  cardHover = rgb(38,50,39),  stroke = rgb(46,60,47),  text = rgb(228,240,228), muted = rgb(145,165,145), accent = rgb(90,180,100),  accent2 = rgb(170,220,110), off = rgb(54,68,55),   onText = rgb(255,255,255) },
-    Sunset   = { icon = "flame",    bg = rgb(26,16,20),  panel = rgb(36,22,26),  card = rgb(48,29,33),  cardHover = rgb(60,36,40),  stroke = rgb(72,44,48),  text = rgb(250,235,228), muted = rgb(190,155,145), accent = rgb(255,110,80),  accent2 = rgb(255,190,90),  off = rgb(80,52,54),   onText = rgb(255,255,255) },
-    Midnight = { icon = "ghost",    bg = rgb(8,10,22),   panel = rgb(13,16,32),  card = rgb(19,23,44),  cardHover = rgb(26,31,56),  stroke = rgb(34,40,70),  text = rgb(225,228,255), muted = rgb(130,135,180), accent = rgb(110,90,255),  accent2 = rgb(240,90,200),  off = rgb(40,46,78),   onText = rgb(255,255,255) },
+    Rain     = { icon = "cloud-rain", bg = rgb(10,18,20), panel = rgb(14,26,28),  card = rgb(20,36,38),  cardHover = rgb(28,48,50),  stroke = rgb(48,78,80),  text = rgb(225,240,238), muted = rgb(140,170,168), accent = rgb(110,200,200), accent2 = rgb(150,215,165), off = rgb(40,62,64),   onText = rgb(255,255,255),
+        backdrop = { sheet = "rain_", sheets = 3, cols = 2, rows = 3, frames = 16, w = 498, h = 269, delay = 0.06, transparency = 0.2 } },
+    Sakura   = { icon = "cherry",   bg = rgb(28,18,24),  panel = rgb(38,24,32),  card = rgb(50,32,42),  cardHover = rgb(62,40,52),  stroke = rgb(110,70,92), text = rgb(250,232,240), muted = rgb(200,160,180), accent = rgb(255,120,170), accent2 = rgb(255,180,210), off = rgb(84,56,70),   onText = rgb(255,255,255),
+        backdrop = { sheet = "sakura_", sheets = 2, cols = 3, rows = 5, frames = 25, w = 340, h = 176, delay = 0.1, transparency = 0.45 } },
+    Forest   = { icon = "leaf",     bg = rgb(8,16,9),    panel = rgb(12,24,13),  card = rgb(18,34,19),  cardHover = rgb(26,46,27),  stroke = rgb(50,90,52),  text = rgb(228,245,228), muted = rgb(150,180,150), accent = rgb(110,210,110), accent2 = rgb(200,235,130), off = rgb(40,62,42),   onText = rgb(255,255,255),
+        backdrop = { sheet = "forest_", sheets = 1, cols = 2, rows = 3, frames = 6, w = 510, h = 318, delay = 0.1, transparency = 0.2 } },
+    Sunset   = { icon = "flame",    bg = rgb(26,14,12),  panel = rgb(36,20,16),  card = rgb(50,28,22),  cardHover = rgb(64,36,28),  stroke = rgb(120,64,44), text = rgb(255,238,225), muted = rgb(210,165,140), accent = rgb(255,120,60),  accent2 = rgb(255,200,90),  off = rgb(84,50,40),   onText = rgb(255,255,255),
+        backdrop = { sheet = "sunset_", sheets = 1, cols = 1, rows = 1, frames = 1, w = 1024, h = 576, transparency = 0.4 } },
+    Midnight = { icon = "ghost",    bg = rgb(6,12,26),   panel = rgb(10,18,36),  card = rgb(14,26,50),  cardHover = rgb(20,36,64),  stroke = rgb(40,64,110), text = rgb(225,235,255), muted = rgb(135,155,195), accent = rgb(80,160,255),  accent2 = rgb(140,255,190), off = rgb(36,50,82),   onText = rgb(255,255,255),
+        backdrop = { sheet = "midnight_", sheets = 1, cols = 1, rows = 1, frames = 1, w = 1024, h = 576, transparency = 0.15 } },
     Light    = { icon = "sun",      bg = rgb(245,246,250), panel = rgb(235,237,243), card = rgb(255,255,255), cardHover = rgb(240,242,248), stroke = rgb(220,223,232), text = rgb(25,27,35), muted = rgb(110,115,130), accent = rgb(124,92,255), accent2 = rgb(64,160,255), off = rgb(205,208,218), onText = rgb(255,255,255) },
 }
-local THEME_ORDER = { "Basic", "Claude", "ChatGPT", "Gemini", "Black", "Code", "Ocean", "Sakura", "Forest", "Sunset", "Midnight", "Light" }
+-- lucid glass everywhere: see-through window/panels/cards (backdrop themes keep the window solid under the picture)
+local DEFAULT_GLASS  = { bg = 0.1, panel = 0.3, card = 0.25 }
+local BACKDROP_GLASS = { bg = 0, panel = 0.35, card = 0.3 }
+for _, t in pairs(THEMES) do t.glass = t.glass or (t.backdrop and BACKDROP_GLASS or DEFAULT_GLASS) end
+local THEME_ALIAS = { Ocean = "Rain" } -- renamed themes, so old settings.json still resolve
+local function themeName(n) n = THEME_ALIAS[n or ""] or n return THEMES[n or ""] and n or "Basic" end
+local THEME_ORDER = { "Basic", "Claude", "ChatGPT", "Gemini", "Black", "Code", "Rain", "Sakura", "Forest", "Sunset", "Midnight", "Light" }
 
 local FONT      = Enum.Font.Gotham
 local FONT_BOLD = Enum.Font.GothamBold
@@ -173,7 +185,7 @@ local UI = {}
 function UI:CreateSplash(o)
     o = o or {}
     local saved = readJson((o.folder or "megab") .. "/settings.json")
-    local T = THEMES[saved.theme or ""] or THEMES.Basic
+    local T = THEMES[themeName(saved.theme)]
 
     local gui = make("ScreenGui", { Name = "megab_splash", ResetOnSpawn = false, IgnoreGuiInset = true, DisplayOrder = 1000, ZIndexBehavior = Enum.ZIndexBehavior.Sibling })
     pcall(function() if syn and syn.protect_gui then syn.protect_gui(gui) end end)
@@ -302,7 +314,7 @@ function UI:CreateWindow(opts)
     -- global UI settings
     local settingsPath = folder .. "/settings.json"
     local settings = readJson(settingsPath)
-    settings.theme = THEMES[settings.theme or ""] and settings.theme or "Basic"
+    settings.theme = themeName(settings.theme)
     settings.key = settings.key or "RightShift"
     local saveSettings = writeJsonLater(settingsPath, function() return settings end)
 
@@ -312,7 +324,7 @@ function UI:CreateWindow(opts)
     local bound, gradients, refreshers = {}, {}, {}
 
     -- themes with `glass` make panel/card backgrounds see-through (so a backdrop shows behind them)
-    local GLASS_KEYS = { panel = true, card = true }
+    local GLASS_KEYS = { bg = true, panel = true, card = true }
     local function glassOf(key) return T.glass and T.glass[key] or 0 end
     local function bind(inst, prop, key)
         table.insert(bound, { inst, prop, key })
@@ -410,8 +422,21 @@ function UI:CreateWindow(opts)
     }, { corner(16) })
     bind(main, "BackgroundColor3", "bg")
     -- a UIStroke on a CanvasGroup ignores GroupTransparency, so open/close fade it too
-    local mainStroke = stroke(main, "stroke", 1)
-    mainStroke.Transparency = 1
+    local mainStroke = make("UIStroke", { Parent = main, Thickness = 1.5, Color = Color3.new(1, 1, 1), Transparency = 1, ApplyStrokeMode = Enum.ApplyStrokeMode.Border })
+    -- glass rim: bright accent-tinted edge at the top left fading into the theme stroke
+    local rim = make("UIGradient", { Parent = mainStroke, Rotation = 45 })
+    onTheme(function()
+        rim.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, T.accent:Lerp(Color3.new(1, 1, 1), 0.55)),
+            ColorSequenceKeypoint.new(0.45, T.stroke),
+            ColorSequenceKeypoint.new(1, T.accent2:Lerp(T.stroke, 0.5)),
+        })
+    end)
+    -- glass sheen: soft diagonal highlight over the whole window (click-through)
+    local sheen = make("Frame", { Name = "Sheen", Parent = main, Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 20, Active = false, Interactable = false })
+    make("UIGradient", { Parent = sheen, Rotation = 30, Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.9), NumberSequenceKeypoint.new(0.3, 0.965), NumberSequenceKeypoint.new(0.55, 1), NumberSequenceKeypoint.new(1, 1),
+    }) })
     local scale = make("UIScale", { Parent = main, Scale = 0.9 })
 
     -- animated backdrop (theme.backdrop): one ImageLabel per spritesheet, frames stepped via ImageRectOffset
@@ -443,6 +468,14 @@ function UI:CreateWindow(opts)
             local per = bd.cols * bd.rows
             local fade = animate and THEME_TW or TweenInfo.new(0)
             for _, img in ipairs(layers) do tween(img, fade, { ImageTransparency = bd.transparency or 0 }) end
+            if bd.frames == 1 then
+                -- still picture: slow drifting zoom so it feels alive
+                local img = layers[1]
+                img.AnchorPoint, img.Position = Vector2.new(0.5, 0.5), UDim2.fromScale(0.5, 0.5)
+                img.ImageRectOffset = Vector2.zero
+                tween(img, TweenInfo.new(18, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), { Size = UDim2.fromScale(1.12, 1.12), Position = UDim2.fromScale(0.47, 0.52) })
+                return
+            end
             local frame = 0
             while token == backdropToken and not Window.unloaded and backdrop.Parent do
                 local sheet, k = frame // per + 1, frame % per
