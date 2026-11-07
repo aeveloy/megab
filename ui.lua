@@ -67,9 +67,9 @@ local TAB_ICONS = {
 local function rgb(r, g, b) return Color3.fromRGB(r, g, b) end
 local THEMES = {
     Basic    = { icon = "sparkles", bg = rgb(17,18,23),  panel = rgb(24,26,33),  card = rgb(31,33,42),  cardHover = rgb(38,41,52),  stroke = rgb(48,51,64),  text = rgb(236,238,245), muted = rgb(140,145,162), accent = rgb(124,92,255), accent2 = rgb(64,196,255),  off = rgb(58,61,76),   onText = rgb(255,255,255) },
-    Claude   = { icon = "star",     bg = rgb(31,30,29),  panel = rgb(38,37,35),  card = rgb(48,46,43),  cardHover = rgb(58,55,51),  stroke = rgb(66,62,57),  text = rgb(240,236,228), muted = rgb(168,160,148), accent = rgb(217,119,87), accent2 = rgb(235,170,120), off = rgb(78,73,67),   onText = rgb(255,255,255) },
-    ChatGPT  = { icon = "bot",      bg = rgb(13,13,13),  panel = rgb(23,23,23),  card = rgb(33,33,33),  cardHover = rgb(44,44,44),  stroke = rgb(52,52,52),  text = rgb(236,236,236), muted = rgb(155,155,155), accent = rgb(16,163,127), accent2 = rgb(25,195,125),  off = rgb(64,64,64),   onText = rgb(255,255,255) },
-    Gemini   = { icon = "gem",      bg = rgb(14,16,24),  panel = rgb(20,23,34),  card = rgb(28,32,46),  cardHover = rgb(36,41,58),  stroke = rgb(46,52,72),  text = rgb(232,236,248), muted = rgb(140,150,175), accent = rgb(71,150,227),  accent2 = rgb(202,102,115), off = rgb(56,62,84),   onText = rgb(255,255,255) },
+    Claude   = { mascot = "claude", icon = "star",     bg = rgb(31,30,29),  panel = rgb(38,37,35),  card = rgb(48,46,43),  cardHover = rgb(58,55,51),  stroke = rgb(66,62,57),  text = rgb(240,236,228), muted = rgb(168,160,148), accent = rgb(217,119,87), accent2 = rgb(235,170,120), off = rgb(78,73,67),   onText = rgb(255,255,255) },
+    ChatGPT  = { mascot = "chatgpt", icon = "bot",      bg = rgb(13,13,13),  panel = rgb(23,23,23),  card = rgb(33,33,33),  cardHover = rgb(44,44,44),  stroke = rgb(52,52,52),  text = rgb(236,236,236), muted = rgb(155,155,155), accent = rgb(16,163,127), accent2 = rgb(25,195,125),  off = rgb(64,64,64),   onText = rgb(255,255,255) },
+    Gemini   = { mascot = "gemini", icon = "gem",      bg = rgb(14,16,24),  panel = rgb(20,23,34),  card = rgb(28,32,46),  cardHover = rgb(36,41,58),  stroke = rgb(46,52,72),  text = rgb(232,236,248), muted = rgb(140,150,175), accent = rgb(71,150,227),  accent2 = rgb(202,102,115), off = rgb(56,62,84),   onText = rgb(255,255,255) },
     Black    = { icon = "moon",     bg = rgb(0,0,0),     panel = rgb(8,8,8),     card = rgb(16,16,16),  cardHover = rgb(26,26,26),  stroke = rgb(38,38,38),  text = rgb(255,255,255), muted = rgb(130,130,130), accent = rgb(255,255,255), accent2 = rgb(170,170,170), off = rgb(50,50,50),   onText = rgb(0,0,0) },
     Code     = { icon = "code",     bg = rgb(30,30,30),  panel = rgb(37,37,38),  card = rgb(45,45,48),  cardHover = rgb(55,55,58),  stroke = rgb(62,62,66),  text = rgb(212,212,212), muted = rgb(140,140,140), accent = rgb(0,122,204),   accent2 = rgb(78,201,176),  off = rgb(70,70,74),   onText = rgb(255,255,255) },
     Ocean    = { icon = "waves",    bg = rgb(10,22,33),  panel = rgb(14,30,44),  card = rgb(19,40,58),  cardHover = rgb(25,50,72),  stroke = rgb(32,60,84),  text = rgb(225,240,250), muted = rgb(130,160,185), accent = rgb(0,170,200),   accent2 = rgb(80,220,200),  off = rgb(38,66,90),   onText = rgb(255,255,255) },
@@ -126,6 +126,25 @@ local function readJson(path)
 end
 local function ensureFolder(path)
     pcall(function() if typeof(isfolder) == "function" and not isfolder(path) then makefolder(path) end end)
+end
+-- mascot PNGs: cached in <folder>/assets, downloaded from <assetBase>assets/ once, shown via getcustomasset
+local assetCache = {}
+local function customAsset(folder, assetBase, name)
+    if assetCache[name] then return assetCache[name] end
+    local getAsset = (typeof(getcustomasset) == "function" and getcustomasset) or (typeof(getsynasset) == "function" and getsynasset)
+    if not getAsset or typeof(isfile) ~= "function" then return nil end
+    local path = folder .. "/assets/" .. name .. ".png"
+    local okFile, exists = pcall(isfile, path)
+    if not (okFile and exists) then
+        if not assetBase or typeof(writefile) ~= "function" then return nil end
+        local ok, body = pcall(game.HttpGet, game, assetBase .. "assets/" .. name .. ".png")
+        if not ok or type(body) ~= "string" or body:sub(2, 4) ~= "PNG" then return nil end
+        ensureFolder(folder .. "/assets")
+        if not pcall(writefile, path, body) then return nil end
+    end
+    local ok, id = pcall(getAsset, path)
+    if ok and id then assetCache[name] = id return id end
+    return nil
 end
 local function writeJsonLater(path, getData)
     local pending = false
@@ -421,6 +440,35 @@ function UI:CreateWindow(opts)
     })
     bind(sidebar, "BackgroundColor3", "panel")
     local pages = make("Frame", { Parent = body, Position = UDim2.fromOffset(SIDE_W, 0), Size = UDim2.new(1, -SIDE_W, 1, 0), BackgroundTransparency = 1 })
+
+    -- AI themes (Claude, ChatGPT, Gemini) show their mascot as a faint watermark over the pages (under settings)
+    local MASCOT_FADE = 0.86
+    local mascot = make("ImageLabel", {
+        Name = "Mascot", Parent = body, AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, 30, 1, 34),
+        Size = UDim2.fromOffset(250, 250), Rotation = -12, BackgroundTransparency = 1, ImageTransparency = 1, ZIndex = 2, Active = false, Interactable = false,
+    })
+    local mascotToken = 0
+    onTheme(function(animate)
+        mascotToken += 1
+        local token, name = mascotToken, T.mascot
+        local function show()
+            local id = name and customAsset(folder, opts.assetBase, name)
+            if token ~= mascotToken or not mascot.Parent then return end
+            if not id then mascot.ImageTransparency = 1 return end
+            mascot.Image = id
+            if animate then
+                mascot.Rotation = -24
+                tween(mascot, THEME_TW, { ImageTransparency = MASCOT_FADE, Rotation = -12 })
+            else
+                mascot.ImageTransparency = MASCOT_FADE
+            end
+        end
+        if animate and mascot.ImageTransparency < 1 then
+            tween(mascot, FAST, { ImageTransparency = 1 }).Completed:Connect(function() task.spawn(show) end)
+        else
+            task.spawn(show)
+        end
+    end)
 
     ------------------------------------------------------ notifications
 

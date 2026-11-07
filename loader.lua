@@ -76,6 +76,7 @@ local Window = UI:CreateWindow({
     name = "megab",
     subtitle = GameName,
     startHidden = true,
+    assetBase = REMOTE_BASE, -- theme mascot PNGs (assets/*.png)
     configuration = {
         fileName = tostring(GameId),
         customFolder = FOLDER,
