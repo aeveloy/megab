@@ -48,7 +48,7 @@ Your switches save per game. Your theme and key save for every game.
 
 ## 🎨 Themes
 
-12 themes, and the colors fade smoothly when you switch. The **Claude**, **ChatGPT**, and **Gemini** themes also show their logo in the background.
+12 themes, and the colors fade smoothly when you switch. The **Claude**, **ChatGPT**, and **Gemini** themes also show their logo in the background, and **Code** plays animated Matrix rain behind see-through panels.
 
 <div align="center">
 <img src="assets/claude.png" width="96" alt="Claude theme mascot">

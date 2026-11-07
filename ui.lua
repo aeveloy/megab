@@ -71,7 +71,10 @@ local THEMES = {
     ChatGPT  = { mascot = "chatgpt", icon = "bot",      bg = rgb(13,13,13),  panel = rgb(23,23,23),  card = rgb(33,33,33),  cardHover = rgb(44,44,44),  stroke = rgb(52,52,52),  text = rgb(236,236,236), muted = rgb(155,155,155), accent = rgb(16,163,127), accent2 = rgb(25,195,125),  off = rgb(64,64,64),   onText = rgb(255,255,255) },
     Gemini   = { mascot = "gemini", icon = "gem",      bg = rgb(14,16,24),  panel = rgb(20,23,34),  card = rgb(28,32,46),  cardHover = rgb(36,41,58),  stroke = rgb(46,52,72),  text = rgb(232,236,248), muted = rgb(140,150,175), accent = rgb(71,150,227),  accent2 = rgb(202,102,115), off = rgb(56,62,84),   onText = rgb(255,255,255) },
     Black    = { icon = "moon",     bg = rgb(0,0,0),     panel = rgb(8,8,8),     card = rgb(16,16,16),  cardHover = rgb(26,26,26),  stroke = rgb(38,38,38),  text = rgb(255,255,255), muted = rgb(130,130,130), accent = rgb(255,255,255), accent2 = rgb(170,170,170), off = rgb(50,50,50),   onText = rgb(0,0,0) },
-    Code     = { icon = "code",     bg = rgb(30,30,30),  panel = rgb(37,37,38),  card = rgb(45,45,48),  cardHover = rgb(55,55,58),  stroke = rgb(62,62,66),  text = rgb(212,212,212), muted = rgb(140,140,140), accent = rgb(0,122,204),   accent2 = rgb(78,201,176),  off = rgb(70,70,74),   onText = rgb(255,255,255) },
+    -- Code: Matrix rain (assets/hacker_*.png, spritesheets of docs/hacker.gif) behind see-through panels
+    Code     = { icon = "code",     bg = rgb(0,0,0),     panel = rgb(2,12,5),    card = rgb(4,22,9),    cardHover = rgb(8,38,15),   stroke = rgb(18,90,38),  text = rgb(205,255,215), muted = rgb(95,185,115), accent = rgb(0,255,95),    accent2 = rgb(0,170,65),    off = rgb(20,60,30),   onText = rgb(0,0,0),
+        glass = { panel = 0.3, card = 0.25 },
+        backdrop = { sheet = "hacker_", sheets = 3, cols = 3, rows = 4, frames = 35, w = 340, h = 243, delay = 0.16, transparency = 0.35 } },
     Ocean    = { icon = "waves",    bg = rgb(10,22,33),  panel = rgb(14,30,44),  card = rgb(19,40,58),  cardHover = rgb(25,50,72),  stroke = rgb(32,60,84),  text = rgb(225,240,250), muted = rgb(130,160,185), accent = rgb(0,170,200),   accent2 = rgb(80,220,200),  off = rgb(38,66,90),   onText = rgb(255,255,255) },
     Sakura   = { icon = "cherry",   bg = rgb(28,18,24),  panel = rgb(38,24,32),  card = rgb(50,32,42),  cardHover = rgb(62,40,52),  stroke = rgb(74,48,62),  text = rgb(250,232,240), muted = rgb(190,150,170), accent = rgb(255,120,170), accent2 = rgb(255,180,210), off = rgb(84,56,70),   onText = rgb(255,255,255) },
     Forest   = { icon = "leaf",     bg = rgb(16,22,17),  panel = rgb(22,30,23),  card = rgb(30,40,31),  cardHover = rgb(38,50,39),  stroke = rgb(46,60,47),  text = rgb(228,240,228), muted = rgb(145,165,145), accent = rgb(90,180,100),  accent2 = rgb(170,220,110), off = rgb(54,68,55),   onText = rgb(255,255,255) },
@@ -308,9 +311,13 @@ function UI:CreateWindow(opts)
     local T = THEMES[settings.theme]
     local bound, gradients, refreshers = {}, {}, {}
 
+    -- themes with `glass` make panel/card backgrounds see-through (so a backdrop shows behind them)
+    local GLASS_KEYS = { panel = true, card = true }
+    local function glassOf(key) return T.glass and T.glass[key] or 0 end
     local function bind(inst, prop, key)
         table.insert(bound, { inst, prop, key })
         inst[prop] = T[key]
+        if prop == "BackgroundColor3" and GLASS_KEYS[key] then inst.BackgroundTransparency = glassOf(key) end
         return inst
     end
     local function onTheme(fn) table.insert(refreshers, fn) fn(false) end
@@ -354,7 +361,9 @@ function UI:CreateWindow(opts)
             local inst, prop, key = b[1], b[2], b[3]
             if inst.Parent then
                 table.insert(alive, b)
-                if animate then tween(inst, info, { [prop] = T[key] }) else inst[prop] = T[key] end
+                local goal = { [prop] = T[key] }
+                if prop == "BackgroundColor3" and GLASS_KEYS[key] then goal.BackgroundTransparency = glassOf(key) end
+                if animate then tween(inst, info, goal) else for p, v in pairs(goal) do inst[p] = v end end
             end
         end
         bound = alive
@@ -404,6 +413,47 @@ function UI:CreateWindow(opts)
     local mainStroke = stroke(main, "stroke", 1)
     mainStroke.Transparency = 1
     local scale = make("UIScale", { Parent = main, Scale = 0.9 })
+
+    -- animated backdrop (theme.backdrop): one ImageLabel per spritesheet, frames stepped via ImageRectOffset
+    local backdrop = make("Frame", { Name = "Backdrop", Parent = main, Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 0 })
+    local backdropToken = 0
+    local function playBackdrop(animate)
+        backdropToken += 1
+        local token, bd = backdropToken, T.backdrop
+        if not bd then
+            for _, img in ipairs(backdrop:GetChildren()) do
+                if animate then tween(img, THEME_TW, { ImageTransparency = 1 }).Completed:Connect(function() img:Destroy() end) else img:Destroy() end
+            end
+            return
+        end
+        task.spawn(function()
+            local layers = {}
+            for i = 1, bd.sheets do
+                local id = customAsset(folder, opts.assetBase, bd.sheet .. i)
+                if not id or token ~= backdropToken then return end
+                layers[i] = make("ImageLabel", {
+                    Parent = backdrop, Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 0,
+                    Image = id, ImageRectSize = Vector2.new(bd.w, bd.h), ScaleType = Enum.ScaleType.Crop,
+                    ImageTransparency = 1, Visible = i == 1,
+                })
+            end
+            for _, img in ipairs(backdrop:GetChildren()) do
+                if not table.find(layers, img) then img:Destroy() end
+            end
+            local per = bd.cols * bd.rows
+            local fade = animate and THEME_TW or TweenInfo.new(0)
+            for _, img in ipairs(layers) do tween(img, fade, { ImageTransparency = bd.transparency or 0 }) end
+            local frame = 0
+            while token == backdropToken and not Window.unloaded and backdrop.Parent do
+                local sheet, k = frame // per + 1, frame % per
+                for i, img in ipairs(layers) do img.Visible = i == sheet end
+                layers[sheet].ImageRectOffset = Vector2.new((k % bd.cols) * bd.w, (k // bd.cols) * bd.h)
+                frame = (frame + 1) % bd.frames
+                task.wait(bd.delay or 0.1)
+            end
+        end)
+    end
+    onTheme(playBackdrop)
 
     -- top bar
     local top = make("Frame", { Name = "Top", Parent = main, Size = UDim2.new(1, 0, 0, TOP_H), BorderSizePixel = 0 })
@@ -878,7 +928,11 @@ function UI:CreateWindow(opts)
     local function paintTab(t, animate)
         local on = t == current
         local info = animate and FAST or TweenInfo.new(0)
-        tween(t.button, info, { BackgroundColor3 = on and T.card or T.panel })
+        tween(t.button, info, {
+            BackgroundColor3 = on and T.card or T.panel,
+            -- on glass themes an idle tab is clear so it doesn't stack on the see-through sidebar
+            BackgroundTransparency = on and glassOf("card") or (T.glass and 1 or 0),
+        })
         tween(t.label, info, { TextColor3 = on and T.text or T.muted })
         tween(t.icon, info, { ImageColor3 = on and T.accent or T.muted })
         tween(t.marker, info, { BackgroundTransparency = on and 0 or 1, Size = on and UDim2.fromOffset(3, 18) or UDim2.fromOffset(3, 4) })
