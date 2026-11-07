@@ -29,6 +29,14 @@ Luau script hub for a Roblox executor. The UI is **our own library, `ui.lua`**; 
 
 - `73885730` Prison Life. Guns come from `Remotes.InteractWithItem:InvokeServer(anyPartOf(Workspace.Prison_ITEMS.giver.<Gun>))`. You must be within about 12 studs, so teleport next to the gun and back. The call returns a message string, and the limit is 2 primary guns. M4A1 is excluded because invoking it opens a gamepass purchase prompt, which also disconnected the MCP client once. Teams change with `Remotes.RequestTeamChange:InvokeServer(Team, 1)`: going Guards to Inmates directly is refused, so go through `Teams.Neutral` first. An Inmate who teleports to the criminal base spawn `(-975, 105, 2057)` becomes a Criminal instantly. Wrap InvokeServer calls in a timeout, because some of them never return.
 
+- `1686885941` Brookhaven RP (placeId 4924922222). Remotes in `ReplicatedStorage.RE` have a `1` inserted between letters (`1Avata1rOrigina1l` = AvatarOriginal). The real names are listed in `Modules.Client.UI.LegacyGame8Settings`. `ReplicatedStorage.Remotes` also has an `Anticheat` event that no client script references.
+  - **Places:** the menu is `Workspace.JobGivers.<Job>` pivots, taken at runtime and skipping any with Y below -50 (Pilot and Flight Attendant sit underground), plus a `FIXED` table of spots checked in game (Bank, Mall, Movie Theater, Hospital, Pet Hospital, Spawn).
+  - **Teleport floors:** buildings are lazy-loaded, so `teleport()` anchors the root and waits up to 4s for a solid floor (a raycast with `RespectCanCollide`, because job trigger parts have CanCollide false) before landing. The Hospital's inside floor stays unloaded, so its spot is the front entrance (-309, 2, 5).
+  - **Houses:** `Workspace["001_Lots"].<Lot>.OwnerObj` (ObjectValue = Player) plus a `Spawn` part.
+  - **Avatar copy:** the game's `ChangePlayerToAvatar` errors when called outside its editor UI (`clone` of nil on the server). Instead, read the target's `Humanoid:GetAppliedDescription()` (its in-game look; `GetHumanoidDescriptionFromUserId` returns the website avatar) and wear each piece with `require(Modules.Client.AvatarEditor.WearingController)`: `RemoveAllAssets`, then `WearAsset(id)` (it toggles), `WearShirt`, `WearPants`, plus `CharacterBodyController.ChangeBodyColor(HeadColor)`. The server refuses some items (2 of 5 in testing). Your own look is saved in `getgenv().megab_bh_original` before the first copy, and the website avatar is the fallback.
+  - **Waypoints:** saved to `megab/brookhaven_waypoints.json`.
+  - **Not verified in game:** infinite jump (it needs real input) and the house teleport (the test account owned no house).
+
 ## Conventions
 
 - Guard executor-only globals (`isfile`, `readfile`, `setclipboard`, `gethui`, …) with `typeof(x) == "function"` or `pcall`, because support differs between executors.

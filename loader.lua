@@ -29,6 +29,8 @@ local SUPPORTED = {
       about = "Teleport menu, speed and jump, anti-AFK, auto paycheck, and auto pet needs (16 needs: school, bed, bath, walk, ride, play...)." },
     { name = "Prison Life", gameId = 73885730, placeId = 155615604, icon = "shield",
       about = "Team ESP with names and distance, get guns, teleports, speed, jump, noclip and auto escape." },
+    { name = "Brookhaven", gameId = 1686885941, placeId = 4924922222, icon = "home",
+      about = "Speed, jump, fly, noclip, infinite jump, place and player teleports, your house, waypoints, player ESP, spectate and avatar copy." },
 }
 
 -- re-executing the loader replaces the previous instance instead of stacking

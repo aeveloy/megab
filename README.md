@@ -10,7 +10,7 @@ You run one line. megab finds your game and loads the right features.
 
 <br>
 
-<img src="https://img.shields.io/badge/games-3-7c5cff?style=for-the-badge" alt="3 games">
+<img src="https://img.shields.io/badge/games-4-7c5cff?style=for-the-badge" alt="4 games">
 <img src="https://img.shields.io/badge/themes-12-40c4ff?style=for-the-badge" alt="12 themes">
 <img src="https://img.shields.io/badge/backgrounds-6-00ff5f?style=for-the-badge" alt="6 backgrounds">
 <img src="https://img.shields.io/badge/key%20system-none-ff7aa8?style=for-the-badge" alt="no key system">
@@ -60,6 +60,7 @@ megab saves your switches for each game. Your theme and key follow you everywher
 <tr><td><b>Murder Mystery 2</b></td><td>Sheriff and murderer ESP, murderer alert, auto grab gun, coin farm</td></tr>
 <tr><td><b>Adopt Me!</b></td><td>Auto pet needs, auto paycheck, teleport menu, anti AFK</td></tr>
 <tr><td><b>Prison Life</b></td><td>Team ESP, free guns, auto escape, noclip</td></tr>
+<tr><td><b>Brookhaven</b></td><td>Fly, place teleports, waypoints, player ESP, spectate, avatar copy</td></tr>
 </table>
 
 <details>
@@ -120,6 +121,35 @@ The Guns tab
 <ul>
 <li><b>Get guns</b> from a dropdown, plus quick buttons for the Remington and the AK.</li>
 <li><b>Auto Escape</b> turns you from inmate to criminal in one click.</li>
+</ul>
+
+</details>
+
+<details>
+<summary><b>Every Brookhaven feature</b></summary>
+<br>
+
+The Basic tab
+<ul>
+<li><b>Speed and jump</b> sliders.</li>
+<li><b>Infinite Jump</b> lets you jump again in the air.</li>
+<li><b>Noclip</b> walks you through walls.</li>
+<li><b>Fly</b> with WASD. Space takes you up and Shift takes you down. You set the speed.</li>
+</ul>
+
+The Teleport tab
+<ul>
+<li><b>Place menu</b> covers the bank, mall, movie theater, hospital, police, fire house, church, club and every job spot.</li>
+<li><b>Teleport to a player</b> from a dropdown.</li>
+<li><b>Teleport to your house</b> once you own one.</li>
+<li><b>Waypoints</b> save the spot you stand on. They stay after you leave, so you can jump back any time.</li>
+</ul>
+
+The Players tab
+<ul>
+<li><b>Player ESP</b> gives everyone their own glow color, with names and distance.</li>
+<li><b>Spectate</b> any player through their camera.</li>
+<li><b>Copy Avatar</b> puts on another player's outfit through Brookhaven's own avatar editor. Restore My Look brings yours back.</li>
 </ul>
 
 </details>
