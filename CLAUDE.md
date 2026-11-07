@@ -40,7 +40,9 @@ Luau script hub for a Roblox executor. The UI is **our own library, `ui.lua`**; 
     4. `WearShirt` and `WearPants`.
     5. `CharacterBodyController.ChangeBodyColor(HeadColor)`.
 
-    The server rate-limits with the message "Too fast!", which was the random "glitch" where pieces went missing, so retry after 0.6s and space requests about 0.35s apart. Wear and the clothes requests toggle, so skip anything already worn (`WearingController.IsWearing`). Verified as a full match (body, head, accessories, shirt, pants) on 3 different players. Your own look is saved in `getgenv().megab_bh_original` before the first copy, and the website avatar is the fallback.
+    The server rate-limits with the message "Too fast!", which was the random "glitch" where pieces went missing, so retry after 0.6s and space requests about 0.35s apart. Wear and the clothes requests toggle, so skip anything already worn (`WearingController.IsWearing`). Verified as a full match (body, head, accessories, shirt, pants) on 3 different players.
+
+    **Size:** Brookhaven has one uniform size, changed with `CharacterBodyController.IncrementBodySize(up)` in steps of 0.05, which scale height, width and head together. The server allows 0.5 to 1.05 (the UI stops at 1). The copy steps toward the target's `HeightScale` and re-reads after every step. Custom per-axis proportions (for example width 0.70) can't be set in this game. Your own look is saved in `getgenv().megab_bh_original` before the first copy, and the website avatar is the fallback.
   - **Waypoints:** saved to `megab/brookhaven_waypoints.json`.
   - **Not verified in game:** infinite jump (it needs real input) and the house teleport (the test account owned no house).
 

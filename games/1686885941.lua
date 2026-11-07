@@ -333,6 +333,17 @@ return function(Window, ctx)
         if d.Face ~= 0 and not (now and now.Face == d.Face) then request("Wear", d.Face) task.wait(0.35) end
         -- 5. skin color
         if okBC then pcall(BC.ChangeBodyColor, d.HeadColor) end
+        -- 6. size: Brookhaven has one uniform size (0.5 to 1.05, steps of 0.05) changed one step at a time,
+        --    so step toward the target's height and re-read after each step (steps can get dropped)
+        if okBC then
+            local want = math.clamp(math.floor(d.HeightScale / 0.05 + 0.5) * 0.05, 0.5, 1.05)
+            for _ = 1, 20 do
+                local m = myLook()
+                if not m or math.abs(m.HeightScale - want) < 0.025 then break end
+                pcall(BC.IncrementBodySize, want > m.HeightScale)
+                task.wait(0.45)
+            end
+        end
         return worn, total
     end
 
