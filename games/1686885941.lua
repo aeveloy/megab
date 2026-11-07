@@ -290,26 +290,55 @@ return function(Window, ctx)
     local genv = (typeof(getgenv) == "function" and getgenv()) or _G
     local copying = false
 
+    -- the avatar editor's server requests, called directly so we get the server's reply message
+    local okRem, Remotes = pcall(function() return require(RS.Packages.Remotes) end)
+    local function myLook()
+        local hum = humanoid()
+        local ok, d = pcall(function() return hum:GetAppliedDescription() end)
+        return ok and d or nil
+    end
+    -- the server answers "Too fast!" when requests come in quickly: wait and try again
+    local function request(name, ...)
+        for _ = 1, 6 do
+            local ok, success, msg = pcall(Remotes.invokeServer, name, ...)
+            if ok and success then return true end
+            if not (ok and tostring(msg):find("Too fast")) then return false, msg end
+            task.wait(0.6)
+        end
+        return false, "Too fast"
+    end
+
     local function wearDescription(d)
+        -- 1. strip everything (this also resets the body) and wait until it's done
         WC.RemoveAllAssets()
-        task.wait(0.8)
+        local t = os.clock()
+        repeat task.wait(0.2) local m = myLook() until (m and #m:GetAccessories(true) == 0) or os.clock() - t > 4
+        task.wait(0.4)
+        -- 2. body and head (dynamic heads carry the face). The server's order is Torso, RightArm, LeftArm, RightLeg, LeftLeg, Head
+        if d.Torso ~= 0 or d.Head ~= 0 then
+            request("ChangeCharacterBody", { d.Torso, d.RightArm, d.LeftArm, d.RightLeg, d.LeftLeg, d.Head })
+            task.wait(0.8)
+        end
+        -- 3. accessories, one at a time (Wear toggles, so skip anything already on)
         local worn, total = 0, 0
         for _, a in ipairs(d:GetAccessories(true)) do
             total += 1
-            local ok, res = pcall(WC.WearAsset, a.AssetId)
-            if ok and res then worn += 1 end
-            task.wait(0.15)
+            if WC.IsWearing(a.AssetId) or request("Wear", a.AssetId) then worn += 1 end
+            task.wait(0.35)
         end
-        if d.Shirt ~= 0 then total += 1 local ok, r = pcall(WC.WearShirt, d.Shirt) if ok and r then worn += 1 end end
-        if d.Pants ~= 0 then total += 1 local ok, r = pcall(WC.WearPants, d.Pants) if ok and r then worn += 1 end end
-        if d.Face ~= 0 then pcall(WC.WearAsset, d.Face) end
+        -- 4. clothes and a classic face, only if they differ (they toggle too)
+        local now = myLook()
+        if d.Shirt ~= 0 then total += 1 if (now and now.Shirt == d.Shirt) or request("WearShirt", d.Shirt) then worn += 1 end task.wait(0.35) end
+        if d.Pants ~= 0 then total += 1 if (now and now.Pants == d.Pants) or request("WearPants", d.Pants) then worn += 1 end task.wait(0.35) end
+        if d.Face ~= 0 and not (now and now.Face == d.Face) then request("Wear", d.Face) task.wait(0.35) end
+        -- 5. skin color
         if okBC then pcall(BC.ChangeBodyColor, d.HeadColor) end
         return worn, total
     end
 
     local function copyAvatar(plr)
-        if not okWC then return notify("Copy Avatar", "Couldn't reach Brookhaven's avatar editor.", "circle-alert") end
-        if copying then return end
+        if not (okWC and okRem) then return notify("Copy Avatar", "Couldn't reach Brookhaven's avatar editor.", "circle-alert") end
+        if copying then return notify("Copy Avatar", "Still copying, one second.") end
         local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid")
         if not hum then return notify("Copy Avatar", plr.DisplayName .. " has no character right now.", "circle-alert") end
         local okD, d = pcall(hum.GetAppliedDescription, hum)
@@ -326,7 +355,7 @@ return function(Window, ctx)
     end
 
     local function restoreAvatar()
-        if not okWC then return end
+        if not (okWC and okRem) then return end
         if copying then return end
         local d = genv.megab_bh_original
         if not d then -- nothing saved this session: use your Roblox website avatar

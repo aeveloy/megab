@@ -33,7 +33,14 @@ Luau script hub for a Roblox executor. The UI is **our own library, `ui.lua`**; 
   - **Places:** the menu is `Workspace.JobGivers.<Job>` pivots, taken at runtime and skipping any with Y below -50 (Pilot and Flight Attendant sit underground), plus a `FIXED` table of spots checked in game (Bank, Mall, Movie Theater, Hospital, Pet Hospital, Spawn).
   - **Teleport floors:** buildings are lazy-loaded, so `teleport()` anchors the root and waits up to 4s for a solid floor (a raycast with `RespectCanCollide`, because job trigger parts have CanCollide false) before landing. The Hospital's inside floor stays unloaded, so its spot is the front entrance (-309, 2, 5).
   - **Houses:** `Workspace["001_Lots"].<Lot>.OwnerObj` (ObjectValue = Player) plus a `Spawn` part.
-  - **Avatar copy:** the game's `ChangePlayerToAvatar` errors when called outside its editor UI (`clone` of nil on the server). Instead, read the target's `Humanoid:GetAppliedDescription()` (its in-game look; `GetHumanoidDescriptionFromUserId` returns the website avatar) and wear each piece with `require(Modules.Client.AvatarEditor.WearingController)`: `RemoveAllAssets`, then `WearAsset(id)` (it toggles), `WearShirt`, `WearPants`, plus `CharacterBodyController.ChangeBodyColor(HeadColor)`. The server refuses some items (2 of 5 in testing). Your own look is saved in `getgenv().megab_bh_original` before the first copy, and the website avatar is the fallback.
+  - **Avatar copy:** the game's `ChangePlayerToAvatar` errors when called outside its editor UI (`clone` of nil on the server). Instead, read the target's `Humanoid:GetAppliedDescription()` (its in-game look; `GetHumanoidDescriptionFromUserId` returns the website avatar) and apply it in order through the editor's server requests (`require(ReplicatedStorage.Packages.Remotes).invokeServer(name, ...)`, which returns `success, message`):
+    1. `WearingController.RemoveAllAssets()`. It is fire-and-forget and **also resets the body**, so poll until no accessories are left.
+    2. `ChangeCharacterBody({Torso, RightArm, LeftArm, RightLeg, LeftLeg, Head})`. **Right comes before left**, and dynamic heads carry the face, because `Face` is 0 for almost everyone.
+    3. `Wear(assetId)` for each accessory.
+    4. `WearShirt` and `WearPants`.
+    5. `CharacterBodyController.ChangeBodyColor(HeadColor)`.
+
+    The server rate-limits with the message "Too fast!", which was the random "glitch" where pieces went missing, so retry after 0.6s and space requests about 0.35s apart. Wear and the clothes requests toggle, so skip anything already worn (`WearingController.IsWearing`). Verified as a full match (body, head, accessories, shirt, pants) on 3 different players. Your own look is saved in `getgenv().megab_bh_original` before the first copy, and the website avatar is the fallback.
   - **Waypoints:** saved to `megab/brookhaven_waypoints.json`.
   - **Not verified in game:** infinite jump (it needs real input) and the house teleport (the test account owned no house).
 
