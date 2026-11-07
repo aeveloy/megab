@@ -1,10 +1,6 @@
 <div align="center">
 
-<img src="docs/loading.png" width="420" alt="megab loading screen">
-
-# megab
-
-**A Roblox script hub with its own hand-made UI.**
+<img src="docs/banner.png" width="100%" alt="megab">
 
 ![Games](https://img.shields.io/badge/games-3-7c5cff?style=for-the-badge)
 ![Themes](https://img.shields.io/badge/themes-12-40c4ff?style=for-the-badge)
@@ -46,11 +42,7 @@ Your switches save per game. Your theme and key save for every game.
 | 🐾 **Adopt Me!** | Teleport menu · speed and jump · anti-AFK · auto paycheck · auto pet needs (16 needs) |
 | 🚔 **Prison Life** | Team ESP · names and distance · get guns · teleports · speed, jump, noclip · auto escape |
 
-**In a game that isn't supported?** megab shows a tab for each supported game with a **Teleport** button, and loads itself again once you arrive.
-
-<div align="center">
-<img src="docs/unsupported.png" width="520" alt="Teleport tabs in an unsupported game">
-</div>
+> 🌍 **In a game that isn't supported?** megab shows a tab for each supported game with a **Teleport** button, then loads itself again once you arrive.
 
 ---
 
@@ -58,31 +50,24 @@ Your switches save per game. Your theme and key save for every game.
 
 12 themes, and the colors fade smoothly when you switch.
 
-`Basic` · `Claude` · `ChatGPT` · `Gemini` · `Black` · `Code` · `Ocean` · `Sakura` · `Forest` · `Sunset` · `Midnight` · `Light`
-
 <div align="center">
-<img src="docs/themes.png" width="520" alt="Theme picker">
+<img src="docs/themes.png" width="100%" alt="The 12 megab themes">
 </div>
-
-<table>
-<tr>
-<td align="center"><img src="docs/ui-basic.png" width="380" alt="Basic theme"><br><b>Basic</b></td>
-<td align="center"><img src="docs/ui-claude.png" width="380" alt="Claude theme"><br><b>Claude</b></td>
-</tr>
-</table>
 
 ---
 
 ## ✨ The UI
 
-- **Lucide icons** on tabs, buttons, and notifications
-- **Smooth animations** when the window opens and closes, plus bouncy toggles, sliding pages, and fading notifications
-- **Draggable** by its top bar, and it can be **minimized** to the title bar
-- **Your own key** to open and close it
+- 🧩 **Lucide icons** on tabs, buttons, and notifications
+- 🌊 **Smooth animations** when the window opens and closes, plus bouncy toggles, sliding pages, and fading notifications
+- 🖱️ **Draggable** by its top bar, and it can be **minimized** to the title bar
+- ⌨️ **Your own key** to open and close it
 
 ---
 
 <div align="center">
+
+<img src="docs/logo.png" width="96" alt="megab logo">
 
 **made by [@aeveloy](https://github.com/aeveloy) and claudecode <3**
 
