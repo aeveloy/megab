@@ -139,6 +139,37 @@ splash:Step(ok and "Features loaded" or title, 0.85)
 local unsupported = not ok and title == "Unsupported game"
 if unsupported then
     local TeleportService = game:GetService("TeleportService")
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+
+    -- runs in the next game after the teleport, so the hub loads there by itself
+    local queueOnTeleport = (syn and syn.queue_on_teleport) or queue_on_teleport or queueonteleport
+        or (fluxus and fluxus.queue_on_teleport)
+    local AUTOLOAD = ([[
+        if not game:IsLoaded() then game.Loaded:Wait() end
+        if isfile and isfile("%s/loader.lua") then
+            loadstring(readfile("%s/loader.lua"))()
+        else
+            loadstring(game:HttpGet("%sloader.lua"))()
+        end
+    ]]):format(FOLDER, FOLDER, REMOTE_BASE or "")
+
+    -- teleport refused (e.g. error 773: this game blocks third-party teleports): give a link instead
+    local pending -- the game we are trying to join
+    table.insert(cleanups, (function()
+        local conn = TeleportService.TeleportInitFailed:Connect(function(player, result, message)
+            if player ~= LocalPlayer or not pending then return end
+            local link = "https://www.roblox.com/games/" .. pending.placeId
+            if typeof(setclipboard) == "function" then pcall(setclipboard, link) end
+            Window:Notify({
+                title = "Teleport blocked",
+                content = ("This game blocks teleports (%s). Link to %s copied, paste it in your browser."):format(tostring(result.Name or result), pending.name),
+                duration = 10, icon = "circle-alert",
+            })
+            pending = nil
+        end)
+        return function() conn:Disconnect() end
+    end)())
+
     for _, g in ipairs(SUPPORTED) do
         local tab = Window:CreateTab({ name = g.name, icon = g.icon })
         tab:CreateSection({ name = "Supported" })
@@ -147,10 +178,13 @@ if unsupported then
             name = "Teleport to " .. g.name,
             description = "Joins a public server of " .. g.name .. ".",
             callback = function()
-                Window:Notify({ title = "Teleporting", content = "Joining " .. g.name .. "...", duration = 5, icon = "map-pin" })
-                local okTp, err = pcall(function()
-                    TeleportService:Teleport(g.placeId, game:GetService("Players").LocalPlayer)
-                end)
+                pending = g
+                if queueOnTeleport then pcall(queueOnTeleport, AUTOLOAD) end
+                Window:Notify({
+                    title = "Teleporting", duration = 5, icon = "map-pin",
+                    content = "Joining " .. g.name .. (queueOnTeleport and "... megab will load there automatically." or "..."),
+                })
+                local okTp, err = pcall(function() TeleportService:Teleport(g.placeId, LocalPlayer) end)
                 if not okTp then
                     Window:Notify({ title = "Teleport failed", content = tostring(err), duration = 8, icon = "circle-alert" })
                 end
