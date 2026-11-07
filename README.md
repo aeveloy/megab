@@ -10,6 +10,18 @@ You run one line. megab finds your game and loads the right features.
 
 <br>
 
+<img src="https://img.shields.io/badge/games-3-7c5cff?style=for-the-badge" alt="3 games">
+<img src="https://img.shields.io/badge/themes-12-40c4ff?style=for-the-badge" alt="12 themes">
+<img src="https://img.shields.io/badge/backgrounds-6-00ff5f?style=for-the-badge" alt="6 backgrounds">
+<img src="https://img.shields.io/badge/key%20system-none-ff7aa8?style=for-the-badge" alt="no key system">
+<img src="https://img.shields.io/badge/%23TEAMMEGAB-111217?style=for-the-badge" alt="#TEAMMEGAB">
+
+<br><br>
+
+<img src="docs/preview.gif" width="88%" alt="megab cycling through the Code, Rain, Sakura, Forest, Sunset and Midnight themes">
+
+<br>
+
 [Run](#run) • [Use](#use) • [Games](#games) • [Themes](#themes) • [UI](#ui) • [FAQ](#faq)
 
 </div>
@@ -220,7 +232,7 @@ You'll find the full rules in <a href="CLAUDE.md">CLAUDE.md</a>.
 
 <h3>made by <a href="https://github.com/aeveloy">@aeveloy</a> and claudecode <3</h3>
 
-Team megab forever.
+<h1>#TEAMMEGAB</h1>
 
 Like it? Give the repo a star.
 
