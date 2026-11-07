@@ -182,7 +182,7 @@ function UI:CreateSplash(o)
     local card = make("CanvasGroup", {
         Parent = gui, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
         Size = UDim2.fromOffset(380, 230), BackgroundColor3 = T.bg, GroupTransparency = 1,
-    }, { corner(18), make("UIStroke", { Color = T.stroke, Thickness = 1, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }) })
+    }, { corner(18), make("UIStroke", { Name = "Edge", Color = T.stroke, Thickness = 1, Transparency = 1, ApplyStrokeMode = Enum.ApplyStrokeMode.Border }) })
     local cardScale = make("UIScale", { Parent = card, Scale = 0.85 })
     local function accentGrad(parent, rot)
         return make("UIGradient", { Parent = parent, Rotation = rot or 0, Color = ColorSequence.new(T.accent, T.accent2) })
@@ -243,6 +243,7 @@ function UI:CreateSplash(o)
     tween(shade, SMOOTH, { BackgroundTransparency = 0.55 })
     tween(cardScale, BOUNCE, { Scale = 1 })
     tween(card, SMOOTH, { GroupTransparency = 0 })
+    tween(card.Edge, SMOOTH, { Transparency = 0 })
 
     local splash = {}
     local shown = 0
@@ -265,6 +266,7 @@ function UI:CreateSplash(o)
         tween(cardScale, SMOOTH, { Scale = 1.06 })
         tween(blur, SMOOTH, { Size = 0 })
         tween(shade, SMOOTH, { BackgroundTransparency = 1 })
+        tween(card.Edge, SMOOTH, { Transparency = 1 })
         tween(card, SMOOTH, { GroupTransparency = 1 }).Completed:Wait()
         alive = false
         blur:Destroy()
@@ -398,7 +400,9 @@ function UI:CreateWindow(opts)
         Size = UDim2.fromOffset(WIDTH, HEIGHT), GroupTransparency = 1,
     }, { corner(16) })
     bind(main, "BackgroundColor3", "bg")
-    stroke(main, "stroke", 1)
+    -- a UIStroke on a CanvasGroup ignores GroupTransparency, so open/close fade it too
+    local mainStroke = stroke(main, "stroke", 1)
+    mainStroke.Transparency = 1
     local scale = make("UIScale", { Parent = main, Scale = 0.9 })
 
     -- top bar
@@ -442,7 +446,7 @@ function UI:CreateWindow(opts)
     local pages = make("Frame", { Parent = body, Position = UDim2.fromOffset(SIDE_W, 0), Size = UDim2.new(1, -SIDE_W, 1, 0), BackgroundTransparency = 1 })
 
     -- AI themes (Claude, ChatGPT, Gemini) show their mascot as a faint watermark over the pages (under settings)
-    local MASCOT_FADE = 0.86
+    local MASCOT_FADE = 0.8
     local mascot = make("ImageLabel", {
         Name = "Mascot", Parent = body, AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, 30, 1, 34),
         Size = UDim2.fromOffset(250, 250), Rotation = -12, BackgroundTransparency = 1, ImageTransparency = 1, ZIndex = 2, Active = false, Interactable = false,
@@ -544,11 +548,13 @@ function UI:CreateWindow(opts)
         scale.Scale = 0.9
         tween(scale, BOUNCE, { Scale = 1 })
         tween(main, SMOOTH, { GroupTransparency = 0 })
+        tween(mainStroke, SMOOTH, { Transparency = 0 })
     end
     local function closeUI()
         if not isOpen then return end
         isOpen = false
         tween(scale, SMOOTH, { Scale = 0.9 })
+        tween(mainStroke, SMOOTH, { Transparency = 1 })
         tween(main, SMOOTH, { GroupTransparency = 1 }).Completed:Connect(function()
             if not isOpen then main.Visible = false end
         end)
@@ -1038,6 +1044,7 @@ function UI:CreateWindow(opts)
         table.clear(conns)
         tween(scale, SMOOTH, { Scale = 0.9 })
         tween(pill, SMOOTH, { Position = UDim2.new(0.5, 0, 0, -60) })
+        tween(mainStroke, SMOOTH, { Transparency = 1 })
         tween(main, SMOOTH, { GroupTransparency = 1 }).Completed:Wait()
         gui:Destroy()
     end
