@@ -21,6 +21,16 @@ local REMOTE_BASE = "https://raw.githubusercontent.com/aeveloy/megab/main/"
 local GameId  = game.GameId
 local PlaceId = game.PlaceId
 
+-- every supported game: shown as teleport tabs when the current game has no module
+local SUPPORTED = {
+    { name = "Murder Mystery 2", gameId = 66654135, placeId = 142823291, icon = "skull",
+      about = "Sheriff and murderer ESP, everyone ESP, distance labels, murderer alert, auto grab gun, teleports, coin ESP and coin farm." },
+    { name = "Adopt Me!", gameId = 383310974, placeId = 920587237, icon = "paw-print",
+      about = "Teleport menu, speed and jump, anti-AFK, auto paycheck, and auto pet needs (16 needs: school, bed, bath, walk, ride, play...)." },
+    { name = "Prison Life", gameId = 73885730, placeId = 155615604, icon = "shield",
+      about = "Team ESP with names and distance, get guns, teleports, speed, jump, noclip and auto escape." },
+}
+
 -- re-executing the loader replaces the previous instance instead of stacking
 local env = (typeof(getgenv) == "function" and getgenv()) or _G
 if env.megab and env.megab.Unload then pcall(env.megab.Unload) end
@@ -125,6 +135,31 @@ splash:Step("Loading " .. GameName .. " features...", 0.65)
 local ok, title, content = loadModule()
 splash:Step(ok and "Features loaded" or title, 0.85)
 
+-- unsupported game: one tab per supported game, each with a teleport button
+local unsupported = not ok and title == "Unsupported game"
+if unsupported then
+    local TeleportService = game:GetService("TeleportService")
+    for _, g in ipairs(SUPPORTED) do
+        local tab = Window:CreateTab({ name = g.name, icon = g.icon })
+        tab:CreateSection({ name = "Supported" })
+        tab:CreateText({ name = g.name, text = g.about })
+        tab:CreateButton({
+            name = "Teleport to " .. g.name,
+            description = "Joins a public server of " .. g.name .. ".",
+            callback = function()
+                Window:Notify({ title = "Teleporting", content = "Joining " .. g.name .. "...", duration = 5, icon = "map-pin" })
+                local okTp, err = pcall(function()
+                    TeleportService:Teleport(g.placeId, game:GetService("Players").LocalPlayer)
+                end)
+                if not okTp then
+                    Window:Notify({ title = "Teleport failed", content = tostring(err), duration = 8, icon = "circle-alert" })
+                end
+            end,
+        })
+    end
+    title, content = "Game not supported yet", "Pick a game from the sidebar and teleport there."
+end
+
 -- Info tab: always present, always last
 local InfoTab = Window:CreateTab({ name = "Info" })
 InfoTab:CreateText({
@@ -148,4 +183,7 @@ InfoTab:CreateText({ name = "Credits", text = "made by @aeveloy and claudecode <
 
 splash:Finish()
 Window:Open()
-Window:Notify({ title = title, content = content, duration = ok and 4 or 10, icon = ok and "circle-check" or "circle-alert" })
+Window:Notify({
+    title = title, content = content, duration = ok and 4 or 10,
+    icon = ok and "circle-check" or (unsupported and "gamepad-2" or "circle-alert"),
+})

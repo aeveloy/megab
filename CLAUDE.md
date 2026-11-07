@@ -10,6 +10,8 @@ Luau script hub for a Roblox executor. The UI is **our own library, `ui.lua`**; 
 
 - On startup the loader shows `UI:CreateSplash` (a loading screen with the credit "made by @aeveloy and claudecode <3"). The window is created with `startHidden = true`, each load phase calls `splash:Step(text, progress)`, and after `splash:Finish()` it calls `Window:Open()`. Keep that credit text when editing.
 - `loader.lua` is the single entry point. It loads `ui.lua`, creates the window (with config saving), loads one per-game module, and **then** creates the **Info** tab, so Info is always the last tab.
+- In a game with no module, the loader builds one tab per entry in its `SUPPORTED` table (name, gameId, placeId, Lucide icon, about text), each with a `TeleportService:Teleport(placeId)` button. **When you add a game module, also add it to `SUPPORTED` in `loader.lua` and to the table in `README.md`.**
+- The repo is public at https://github.com/aeveloy/megab, and `REMOTE_BASE` points at its raw `main` branch. Users run `loadstring(game:HttpGet("https://raw.githubusercontent.com/aeveloy/megab/main/loader.lua"))()`. Push to `main` to ship.
 - Modules are keyed by **`game.GameId`** (universe ID, which is the same across every place in a game), not `PlaceId`. The file is `games/<GameId>.lua` (or `.luau` when loaded locally).
 - Module lookup order:
   1. Local: `<executor workspace>/megab/games/<GameId>.lua` via `isfile`/`readfile`. The executor reads its own workspace, not this repo, so after editing a module, write the new content there too (e.g. `writefile` through an MCP execute call).

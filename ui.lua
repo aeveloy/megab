@@ -88,7 +88,7 @@ local SMOOTH    = TweenInfo.new(0.35, Enum.EasingStyle.Quint, Enum.EasingDirecti
 local BOUNCE    = TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 local THEME_TW  = TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 
-local WIDTH, HEIGHT, TOP_H, SIDE_W = 620, 420, 56, 160
+local WIDTH, HEIGHT, TOP_H, SIDE_W = 640, 420, 56, 180
 
 ------------------------------------------------------------------ small helpers
 
@@ -851,7 +851,7 @@ function UI:CreateWindow(opts)
         local ic = icon(iconName, 18, button)
         ic.AnchorPoint, ic.Position = Vector2.new(0, 0.5), UDim2.new(0, 14, 0.5, 0)
         local lbl = make("TextLabel", { Parent = button, BackgroundTransparency = 1, Position = UDim2.fromOffset(42, 0), Size = UDim2.new(1, -42, 1, 0),
-            Text = name, Font = FONT_BOLD, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left })
+            Text = name, Font = FONT_BOLD, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd })
         local marker = make("Frame", { Parent = button, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 4, 0.5, 0), Size = UDim2.fromOffset(3, 4), BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 1, BorderSizePixel = 0 }, { corner(2) })
         grad(marker, 90)
 
