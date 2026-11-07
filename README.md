@@ -4,211 +4,224 @@
 
 <br>
 
-**A Roblox script hub with a hand-made glass UI.**
+<b>A Roblox script hub with a glass UI we built from scratch.</b>
 <br>
-One line to run. It finds your game and loads the right features.
+You run one line. megab finds your game and loads the right features.
 
 <br>
 
-![Games](https://img.shields.io/badge/games-3-7c5cff?style=for-the-badge)
-![Themes](https://img.shields.io/badge/themes-12-40c4ff?style=for-the-badge)
-![Backgrounds](https://img.shields.io/badge/animated_backgrounds-4-00ff5f?style=for-the-badge)
-![Icons](https://img.shields.io/badge/icons-Lucide-d97757?style=for-the-badge)
-![Luau](https://img.shields.io/badge/Luau-2C2D72?style=for-the-badge&logo=lua&logoColor=white)
-
-[⚡ Run it](#-run-it) • [🎮 Games](#-games) • [🎨 Themes](#-themes) • [✨ The UI](#-the-ui) • [❓ FAQ](#-faq)
+[Run](#run) • [Use](#use) • [Games](#games) • [Themes](#themes) • [UI](#ui) • [FAQ](#faq)
 
 </div>
 
----
+<br>
 
-## ⚡ Run it
+## Run
 
-Paste this into your executor and press **Execute**:
+Paste this into your executor and press Execute.
 
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/aeveloy/megab/main/loader.lua"))()
 ```
 
-That's the whole setup. 🎉
+That's it. No setup, no key.
 
----
-
-## 🧭 How to use it
-
-| | Step | What happens |
-|:-:|---|---|
-| 1️⃣ | **Run** the line above | A loading screen fills up for about 2 seconds |
-| 2️⃣ | **Pick a tab** on the left | Every feature is a switch, slider, dropdown, or button |
-| 3️⃣ | **Hide it** with ✕ or `RightShift` | A small icon waits at the top center: click it to come back |
-| 4️⃣ | **Make it yours** with ⚙️ | Pick a theme and your own open/close key |
-
-> 💾 Your switches save **per game**. Your theme and key save for **every game**.
-
----
-
-## 🎮 Games
-
-| | Game | Highlights |
-|:-:|---|---|
-| 🔪 | **Murder Mystery 2** | Sheriff and murderer ESP · murderer alert · auto grab gun · coin farm |
-| 🐾 | **Adopt Me!** | Auto pet needs · auto paycheck · teleport menu · anti-AFK |
-| 🚔 | **Prison Life** | Team ESP · get guns · auto escape · noclip |
-
-<details>
-<summary><b>🔪 Murder Mystery 2: every feature</b></summary>
 <br>
 
-**Basic tab**
-- 🔴🔵 **Sheriff and Murderer ESP**: murderer glows red, sheriff glows blue
-- 🟢 **Everyone ESP**: innocents glow green, with names above heads
-- 📏 **Display Distance**: role and distance in studs above murderer and sheriff
-- 🟣 **Dropped Gun ESP**: highlights the gun after the sheriff dies
-- 🔔 **Role Notify**: tells you who the murderer and sheriff are
-- ⚠️ **Murderer Alert**: warns you when the murderer gets close (you pick the distance)
-- 📍 **Teleports**: to the murderer, to the sheriff, or to any player you pick
-- 🔫 **Auto Grab Gun**: grabs the dropped gun for you
+## Use
 
-**Farm tab**
-- 🪙 **Coin ESP**: highlights every coin on the map
-- 💰 **Coin Farm**: collects coins for you, at the speed you set
+<table>
+<tr><td align="center"><b>1</b></td><td>Run the line above. A loading screen fills up in about 2 seconds.</td></tr>
+<tr><td align="center"><b>2</b></td><td>Pick a tab on the left. Every feature is a switch, slider, dropdown or button.</td></tr>
+<tr><td align="center"><b>3</b></td><td>Hide it with the X or RightShift. A small icon waits at the top of your screen. Click it to bring megab back.</td></tr>
+<tr><td align="center"><b>4</b></td><td>Open the gear in the top right. Pick a theme and choose your own key.</td></tr>
+</table>
+
+megab saves your switches for each game. Your theme and key follow you everywhere.
+
+<br>
+
+## Games
+
+<table>
+<tr><th>Game</th><th>What you get</th></tr>
+<tr><td><b>Murder Mystery 2</b></td><td>Sheriff and murderer ESP, murderer alert, auto grab gun, coin farm</td></tr>
+<tr><td><b>Adopt Me!</b></td><td>Auto pet needs, auto paycheck, teleport menu, anti AFK</td></tr>
+<tr><td><b>Prison Life</b></td><td>Team ESP, free guns, auto escape, noclip</td></tr>
+</table>
+
+<details>
+<summary><b>Every Murder Mystery 2 feature</b></summary>
+<br>
+
+The Basic tab
+<ul>
+<li><b>Sheriff and Murderer ESP</b> makes the murderer glow red and the sheriff glow blue.</li>
+<li><b>Everyone ESP</b> makes innocents glow green and puts names above heads.</li>
+<li><b>Display Distance</b> shows the role and distance in studs above the murderer and sheriff.</li>
+<li><b>Dropped Gun ESP</b> lights up the gun after the sheriff dies.</li>
+<li><b>Role Notify</b> tells you who the murderer and sheriff are.</li>
+<li><b>Murderer Alert</b> warns you when the murderer gets close. You set the distance.</li>
+<li><b>Teleports</b> take you to the murderer, the sheriff or any player you pick.</li>
+<li><b>Auto Grab Gun</b> grabs the dropped gun for you.</li>
+</ul>
+
+The Farm tab
+<ul>
+<li><b>Coin ESP</b> lights up every coin on the map.</li>
+<li><b>Coin Farm</b> collects coins for you at the speed you set.</li>
+</ul>
 
 </details>
 
 <details>
-<summary><b>🐾 Adopt Me!: every feature</b></summary>
+<summary><b>Every Adopt Me! feature</b></summary>
 <br>
 
-**Basic tab**
-- 📍 **Teleport menu**: home, shops, and map spots in one dropdown
-- 🏃 **Speed and jump** sliders
-- 💤 **Anti-AFK**: no idle kick
+The Basic tab
+<ul>
+<li><b>Teleport menu</b> takes you home, to the main map, the school, the hospital and every shop.</li>
+<li><b>Speed and jump</b> sliders.</li>
+<li><b>Anti AFK</b> stops the idle kick.</li>
+</ul>
 
-**Farm tab**
-- 💵 **Auto Paycheck**: collects your paycheck
-- 🐶 **Auto Pet Needs**: finds what your pet needs and does it, including school, bed, bath, walk, ride, and play
+The Farm tab
+<ul>
+<li><b>Auto Paycheck</b> collects your paycheck.</li>
+<li><b>Auto Pet Needs</b> checks what your pet wants and does it. That covers school, bed, bath, walks, rides, play and more.</li>
+</ul>
 
 </details>
 
 <details>
-<summary><b>🚔 Prison Life: every feature</b></summary>
+<summary><b>Every Prison Life feature</b></summary>
 <br>
 
-**Basic tab**
-- 👥 **Team ESP** with names and distance
-- 📍 **Teleports** to the main places
-- 🏃 **Speed, jump, and noclip**
+The Basic tab
+<ul>
+<li><b>Team ESP</b> with names and distance.</li>
+<li><b>Teleports</b> to the main spots in the prison.</li>
+<li><b>Speed, jump and noclip.</b></li>
+</ul>
 
-**Guns tab**
-- 🔫 **Get guns** from a dropdown, plus quick buttons for Remington and AK
-- 🏃‍♂️ **Auto Escape**: inmate to criminal in one click
+The Guns tab
+<ul>
+<li><b>Get guns</b> from a dropdown, plus quick buttons for the Remington and the AK.</li>
+<li><b>Auto Escape</b> turns you from inmate to criminal in one click.</li>
+</ul>
 
 </details>
 
-> 🌍 **In a game that isn't supported?** megab shows a tab for each supported game with a **Teleport** button, and loads itself again when you arrive.
+Playing a game megab doesn't support? You get a tab for each supported game with a Teleport button. megab loads itself again when you land.
 
----
+<br>
 
-## 🎨 Themes
+## Themes
 
-12 themes. Colors fade smoothly when you switch, and every theme uses the glass look.
+You get 12 themes. Colors fade when you switch. Every theme uses the glass look.
 
 <div align="center">
-<img src="docs/gallery.png" width="100%" alt="Code, Rain, Sakura, Forest, Sunset, and Midnight themes with their backgrounds">
+<img src="docs/gallery.png" width="100%" alt="Code, Rain, Sakura, Forest, Sunset and Midnight themes with their backgrounds">
 </div>
 
 <br>
 
-| Theme | Background |
-|---|---|
-| 💻 **Code** | Matrix rain, animated |
-| 🌧️ **Rain** | Rainy garden, animated |
-| 🌸 **Sakura** | Cherry blossoms, animated |
-| 🌿 **Forest** | Waterfall, animated |
-| 🌅 **Sunset** | Golden sky that slowly drifts |
-| 🌌 **Midnight** | Milky Way that slowly drifts |
-| 🤖 **Claude · ChatGPT · Gemini** | Their logo, faint in the corner |
-| ⚫ **Basic · Black · Light** | Plain glass |
+<table>
+<tr><th>Theme</th><th>Background</th></tr>
+<tr><td><b>Code</b></td><td>Matrix rain that moves</td></tr>
+<tr><td><b>Rain</b></td><td>A rainy garden that moves</td></tr>
+<tr><td><b>Sakura</b></td><td>Falling cherry blossoms</td></tr>
+<tr><td><b>Forest</b></td><td>A waterfall that moves</td></tr>
+<tr><td><b>Sunset</b></td><td>A golden sky that slowly drifts</td></tr>
+<tr><td><b>Midnight</b></td><td>The Milky Way, slowly drifting</td></tr>
+<tr><td><b>Claude, ChatGPT, Gemini</b></td><td>Their logo, faint in the corner</td></tr>
+<tr><td><b>Basic, Black, Light</b></td><td>Plain glass</td></tr>
+</table>
 
 <details>
-<summary><b>🎨 See all 12 color sets</b></summary>
+<summary><b>See all 12 color sets</b></summary>
 <br>
 <div align="center">
 <img src="docs/themes.png" width="100%" alt="The 12 megab themes">
 </div>
 </details>
 
----
+<br>
 
-## ✨ The UI
+## UI
 
-Built from scratch for megab, with no Rayfield or other UI library.
+We wrote it from zero. No Rayfield, no borrowed library.
 
-- 🪟 **Glass look**: see-through panels, a soft shine, and an outline that glows in the theme color
-- 🧩 **Lucide icons** on tabs, buttons, and notifications
-- 🌊 **Smooth animations**: the window bounces open, switches bounce, pages slide, and notifications fade
-- 🎬 **Moving backgrounds**: GIFs turned into picture sheets and played inside Roblox
-- 🖱️ **Drag it** by the top bar, or **minimize** it to just the title bar
-- ⌨️ **Your own key** to open and close it
-- 🔔 **Notifications** with an icon and a gradient outline
+<ul>
+<li><b>Glass.</b> Panels let the background show through. A soft shine sits on top, and the edge glows in your theme color.</li>
+<li><b>Lucide icons</b> on tabs, buttons and notifications.</li>
+<li><b>Smooth motion.</b> The window bounces open. Switches bounce too. Pages slide and notifications fade.</li>
+<li><b>Moving backgrounds.</b> Roblox can't play GIFs, so megab cuts each one into picture sheets and plays them frame by frame.</li>
+<li><b>Drag it</b> by the top bar, or shrink it down to the title bar.</li>
+<li><b>Your key.</b> Pick any key to open and close it.</li>
+</ul>
 
----
+<br>
 
-## ❓ FAQ
+## FAQ
 
 <details>
 <summary><b>Which executors work?</b></summary>
 <br>
 
-Any executor with `loadstring` and `game:HttpGet`.
-The backgrounds and logos also need `getcustomasset` and `writefile`. Without them you still get every feature, just without the pictures.
+Any executor with <code>loadstring</code> and <code>game:HttpGet</code> runs megab.
+The backgrounds and logos also need <code>getcustomasset</code> and <code>writefile</code>. Without those you still get every feature. You just don't see the pictures.
 </details>
 
 <details>
-<summary><b>Where are my settings saved?</b></summary>
+<summary><b>Where does megab save my stuff?</b></summary>
 <br>
 
-In your executor's `workspace/megab/` folder:
-- `settings.json`: theme and key
-- `configs/<GameId>.json`: your switches for each game
-- `assets/`: background pictures, downloaded once the first time you pick a theme
+Everything lives in the <code>megab</code> folder inside your executor's workspace.
+<ul>
+<li><code>settings.json</code> holds your theme and key.</li>
+<li><code>configs</code> holds your switches, one file per game.</li>
+<li><code>assets</code> holds the background pictures. megab downloads each one once, the first time you pick that theme.</li>
+</ul>
 </details>
 
 <details>
-<summary><b>The teleport says "blocked" or error 773?</b></summary>
+<summary><b>The teleport failed with error 773. Now what?</b></summary>
 <br>
 
-Some games block teleports to other games. megab copies the game's link to your clipboard: paste it in your browser and join from there.
+Some games block teleports to other games. megab copies the game link to your clipboard. Paste it in your browser and join from there.
 </details>
 
 <details>
 <summary><b>How do I close it for good?</b></summary>
 <br>
 
-**Info** tab → **Unload hub**. Running the loader again also replaces the old window, so you never get two.
+Open the Info tab and press Unload hub. Running the loader again also replaces the old window, so you never end up with two.
 </details>
 
 <details>
-<summary><b>🛠️ For developers: how do I add a game?</b></summary>
+<summary><b>I'm a developer. How do I add a game?</b></summary>
 <br>
 
-1. Create `games/<GameId>.lua` that returns `function(Window, ctx) ... end`
-2. Add tabs with `Window:CreateTab({ name, icon })`, then `tab:CreateToggle / Slider / Dropdown / Button / Text`
-3. Add the game to `SUPPORTED` in `loader.lua` and to the table above
+<ol>
+<li>Create a file in <code>games</code> named after the game's GameId, like <code>games/66654135.lua</code>. It returns <code>function(Window, ctx) ... end</code>.</li>
+<li>Add tabs with <code>Window:CreateTab</code>, then fill them with toggles, sliders, dropdowns, buttons and text.</li>
+<li>Add the game to <code>SUPPORTED</code> in <code>loader.lua</code> and to the games table in this README.</li>
+</ol>
 
-The full rules are in [`CLAUDE.md`](CLAUDE.md).
+You'll find the full rules in <a href="CLAUDE.md">CLAUDE.md</a>.
 </details>
 
----
+<br>
 
 <div align="center">
 
 <img src="docs/logo.png" width="96" alt="megab logo">
 
-### made by [@aeveloy](https://github.com/aeveloy) and claudecode <3
+<h3>made by <a href="https://github.com/aeveloy">@aeveloy</a> and claudecode <3</h3>
 
-**#TEAMMEGAB** 💜
+Team megab forever.
 
-⭐ Star the repo if megab made your game better!
+Like it? Give the repo a star.
 
 </div>
