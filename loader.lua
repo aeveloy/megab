@@ -219,7 +219,43 @@ InfoTab:CreateButton({
 InfoTab:CreateText({ name = "Credits", text = "made by @aeveloy and claudecode <3" })
 
 splash:Finish()
+
+-- Discord invite: asked every time, after the loading screen and before the hub opens
+local DISCORD = "https://discord.gg/aeveloystudios"
+local joinDiscord = UI:Prompt({
+    title = "Join our Discord?",
+    text = "Get updates, new games and help in the megab Discord server.",
+    yes = "Yes", no = "No", icon = "message-circle", folder = FOLDER,
+})
+-- Roblox can't open a browser. The Discord desktop app listens for local RPC on ports
+-- 6463 to 6472, and INVITE_BROWSER opens the invite there. Otherwise copy the link.
+local function openDiscordInvite()
+    local req = (syn and syn.request) or (http and http.request) or http_request or request or (fluxus and fluxus.request)
+    if typeof(req) ~= "function" then return false end
+    local Http = game:GetService("HttpService")
+    for port = 6463, 6472 do
+        local okReq, res = pcall(req, {
+            Url = ("http://127.0.0.1:%d/rpc?v=1"):format(port),
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json", Origin = "https://discord.com" },
+            Body = Http:JSONEncode({ cmd = "INVITE_BROWSER", nonce = Http:GenerateGUID(false), args = { code = DISCORD:match("[^/]+$") } }),
+        })
+        if okReq and res and (res.StatusCode == 200 or res.Success) then return true end
+    end
+    return false
+end
+local openedDiscord = joinDiscord and openDiscordInvite()
+if joinDiscord and typeof(setclipboard) == "function" then pcall(setclipboard, DISCORD) end
+
 Window:Open()
+if joinDiscord then
+    Window:Notify({
+        title = openedDiscord and "Discord invite opened" or "Discord invite copied",
+        content = openedDiscord and "Check your Discord app. The link is also copied: " .. DISCORD
+            or "Paste it in your browser or Discord: " .. DISCORD,
+        duration = 8, icon = "message-circle",
+    })
+end
 Window:Notify({
     title = title, content = content, duration = ok and 4 or 10,
     icon = ok and "circle-check" or (unsupported and "gamepad-2" or "circle-alert"),

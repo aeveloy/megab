@@ -55,6 +55,7 @@ local ICONS = {
     ["bird"] = { 16898612819, 869, 0 },          ["skull"] = { 16898613777, 49, 869 },
     ["target"] = { 16898613869, 514, 771 },      ["crown"] = { 16898613044, 404, 918 },
     ["users"] = { 16898613869, 967, 98 },        ["user"] = { 16898613869, 661, 869 },
+    ["message-circle"] = { 16898613613, 563, 820 },
 }
 
 -- default tab icons by tab name
@@ -295,6 +296,79 @@ function UI:CreateSplash(o)
         splash:Finish()
     end
     return splash
+end
+
+-- Yes/No question card (themed like the splash). Yields until a button is clicked; returns true for yes.
+-- o = { title, text, yes = "Yes", no = "No", icon = "<lucide name>", folder }
+function UI:Prompt(o)
+    o = o or {}
+    local saved = readJson((o.folder or "megab") .. "/settings.json")
+    local T = THEMES[themeName(saved.theme)]
+
+    local gui = make("ScreenGui", { Name = "megab_prompt", ResetOnSpawn = false, IgnoreGuiInset = true, DisplayOrder = 1000, ZIndexBehavior = Enum.ZIndexBehavior.Sibling })
+    pcall(function() if syn and syn.protect_gui then syn.protect_gui(gui) end end)
+    gui.Parent = guiParent()
+    local blur = make("BlurEffect", { Size = 0, Parent = game:GetService("Lighting") })
+    local shade = make("Frame", { Parent = gui, Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(0, 0, 0), BackgroundTransparency = 1, BorderSizePixel = 0 })
+
+    local card = make("CanvasGroup", {
+        Parent = gui, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.fromOffset(380, 250), BackgroundColor3 = T.bg, GroupTransparency = 1,
+    }, { corner(18) })
+    local edge = make("UIStroke", { Parent = card, Color = Color3.new(1, 1, 1), Thickness = 1.5, Transparency = 1, ApplyStrokeMode = Enum.ApplyStrokeMode.Border })
+    make("UIGradient", { Parent = edge, Rotation = 45, Color = ColorSequence.new(T.accent, T.accent2) })
+    local cardScale = make("UIScale", { Parent = card, Scale = 0.85 })
+
+    local badge = make("Frame", { Parent = card, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 26), Size = UDim2.fromOffset(56, 56), BackgroundColor3 = Color3.new(1, 1, 1) }, { corner(16) })
+    make("UIGradient", { Parent = badge, Rotation = 45, Color = ColorSequence.new(T.accent, T.accent2) })
+    local d = ICONS[o.icon or ""] or ICONS["message-circle"]
+    make("ImageLabel", { Parent = badge, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(28, 28), BackgroundTransparency = 1,
+        Image = "rbxassetid://" .. d[1], ImageRectSize = Vector2.new(48, 48), ImageRectOffset = Vector2.new(d[2], d[3]), ImageColor3 = T.onText })
+
+    make("TextLabel", { Parent = card, BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 96), Size = UDim2.new(1, -40, 0, 24),
+        Text = o.title or "", Font = FONT_BOLD, TextSize = 19, TextColor3 = T.text })
+    make("TextLabel", { Parent = card, BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 124), Size = UDim2.new(1, -48, 0, 50),
+        Text = o.text or "", Font = FONT, TextSize = 13, TextColor3 = T.muted, TextWrapped = true, TextYAlignment = Enum.TextYAlignment.Top })
+
+    local answer
+    local function button(label, x, primary)
+        local b = make("TextButton", {
+            Parent = card, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(x, 0, 1, -22), Size = UDim2.new(0.5, -30, 0, 40),
+            AutoButtonColor = false, Text = "", BackgroundColor3 = T.card,
+        }, { corner(12) })
+        -- a UIGradient also tints its parent's text, so the gradient lives on its own fill frame
+        if primary then
+            local fill = make("Frame", { Parent = b, Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 1 }, { corner(12) })
+            make("UIGradient", { Parent = fill, Rotation = 0, Color = ColorSequence.new(T.accent, T.accent2) })
+        end
+        make("TextLabel", { Parent = b, Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 2,
+            Text = label, Font = FONT_BOLD, TextSize = 15, TextColor3 = primary and T.onText or T.text })
+        local s = make("UIScale", { Parent = b })
+        b.MouseEnter:Connect(function() tween(s, FAST, { Scale = 1.05 }) end)
+        b.MouseLeave:Connect(function() tween(s, FAST, { Scale = 1 }) end)
+        b.MouseButton1Down:Connect(function() tween(s, FAST, { Scale = 0.95 }) end)
+        b.MouseButton1Click:Connect(function() if answer == nil then answer = primary end end)
+        return b
+    end
+    button(o.no or "No", 0.27, false)
+    button(o.yes or "Yes", 0.73, true)
+
+    tween(blur, SMOOTH, { Size = 14 })
+    tween(shade, SMOOTH, { BackgroundTransparency = 0.55 })
+    tween(cardScale, BOUNCE, { Scale = 1 })
+    tween(card, SMOOTH, { GroupTransparency = 0 })
+    tween(edge, SMOOTH, { Transparency = 0 })
+
+    while answer == nil and gui.Parent do task.wait() end
+
+    tween(cardScale, SMOOTH, { Scale = 1.06 })
+    tween(blur, SMOOTH, { Size = 0 })
+    tween(shade, SMOOTH, { BackgroundTransparency = 1 })
+    tween(edge, SMOOTH, { Transparency = 1 })
+    tween(card, SMOOTH, { GroupTransparency = 1 }).Completed:Wait()
+    blur:Destroy()
+    gui:Destroy()
+    return answer == true
 end
 
 function UI:CreateWindow(opts)
